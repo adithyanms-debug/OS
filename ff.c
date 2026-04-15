@@ -43,7 +43,7 @@ int main() {
             i+1, 
             processSize[i],
             allocation[i]+1,
-            processSize[i] + blockSize[i],
+            processSize[i] + blockSize[allocation[i]],
             blockSize[allocation[i]]);
         } else {
             printf("%d\t%d\tNot Allocated\n", i+1, processSize[i]);
