@@ -45,6 +45,9 @@ int main() {
         start = tracks[i];
     }
 
+    seektime += abs(end - 0);
+    start = 0;
+
     for (int i = 0; i < headpos; i++) {
         printf("%d -> ", tracks[i]);
         seektime += abs(start - tracks[i]);

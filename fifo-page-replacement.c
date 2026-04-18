@@ -3,6 +3,7 @@
 int main() {
 
     int rs[100], frames[100], i, j, nop, nof, fault = 0, hit = 0;
+    
     printf("Enter the number of pages : ");
     scanf("%d", &nop);
 

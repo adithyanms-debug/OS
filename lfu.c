@@ -39,6 +39,7 @@ int main() {
         }
 
         if(j > nof) {
+            fault++;
             int lfu = 1;
             for(j = 2; j <= nof; j++) {
                 if(feq[j] < feq[lfu]) {
@@ -47,15 +48,14 @@ int main() {
             }
             frames[lfu] = rs[i];
             feq[lfu] = 1;
-
-            for(j = 1; j <= nof; j++) {
+        }
+        for(j = 1; j <= nof; j++) {
                 if(frames[j] == -1) {
                     printf("%c\t", 'E');
                 } else {
                     printf("%d\t", frames[j]);
                 }
             }
-        }
         printf("\n");
     }
 

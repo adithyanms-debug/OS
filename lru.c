@@ -15,11 +15,13 @@ int main() {
     printf("Enter the number of frames : ");
     scanf("%d", &nof);
 
-    for(i = 1; i <= nof; i++) {
-        frames[i] = -1;
-        recent[i] = 0;
-        printf("Frames %d", i);
+    for(j = 1; j <= nof; j++) {
+        frames[j] = -1;
+        recent[j] = 0;
+        printf("Frames %d", j);
     }
+
+    printf("\n");
 
     for(i = 1; i <= nop; i++) {
         for(j = 1; j <= nof; j++) {
@@ -42,18 +44,17 @@ int main() {
                 if(recent[j] < recent[lru]) {
                     lru = j;
                 }
-                frames[lru] = rs[i];
-                recent[lru] = i;
             }
-
-            for(j = 1; j <= nof; j++) {
-                if(frames[i] == -1) {
+            frames[lru] = rs[i];
+            recent[lru] = i;
+        }
+        for(j = 1; j <= nof; j++) {
+                if(frames[j] == -1) {
                     printf("%c\t", 'E');
                 } else {
-                    printf("%d\t", frames[i]);
+                    printf("%d\t", frames[j]);
                 }
             }
-        }
         printf("\n");
     }
 
