@@ -1,70 +1,73 @@
 #include <stdio.h>
 
 int main() {
+    int i, j, k;
+    int resources[50] = {0}, need[50][50] = {0};
+    int alloc[50][50] = {0}, max[50][50] = {0};
+    int nop, nor, avlbl[50];
+    int finished[50] = {0};  // ✅ dedicated visited array
 
-    int i, j, k, nop, nor, resources[50] = {0}, alloc[50][50] = {0}, need[50][50] = {0}, max[50][50] = {0}, avlbl[50];
-    printf("Enter thr number of process : ");
+    printf("Enter the total processes: ");
     scanf("%d", &nop);
 
-    printf("Enter the number of resources : ");
+    printf("Enter the total resources: ");
     scanf("%d", &nor);
 
-    printf("Enter the allocation matrix\n");
-    for(i = 1; i <= nop; i++) {
-        for(j = 1; j <= nor; j++) {
+    printf("Enter the resource allocation matrix:\n");
+    for (i = 1; i <= nop; i++)
+        for (j = 1; j <= nor; j++)
             scanf("%d", &alloc[i][j]);
-        }
-    }
 
-    printf("Enter the max allocation matrix\n");
-    for(i = 1; i <= nop; i++) {
-        for(j = 1; j <= nor; j++) {
+    printf("Enter the max resource matrix:\n");
+    for (i = 1; i <= nop; i++)
+        for (j = 1; j <= nor; j++) {
             scanf("%d", &max[i][j]);
             need[i][j] = max[i][j] - alloc[i][j];
         }
-    }
 
-    printf("Enter the resource instance\n");
-    for(i = 1; i <= nor; i++) {
-        printf("R%d :- ", i);
+    printf("Enter the total instances of each resource:\n");
+    for (i = 1; i <= nor; i++) {
+        printf("R%d: ", i);
         scanf("%d", &resources[i]);
     }
 
-    for(i = 1; i <= nor; i++) {
+    // ✅ Fix Bug 1: use rsum directly
+    for (i = 1; i <= nor; i++) {
         int rsum = 0;
-        for(j = 1; j<= nop; j++) {
+        for (j = 1; j <= nop; j++)
             rsum += alloc[j][i];
-        }
-        alloc[j][i] = rsum;
-        avlbl[i] = resources[i] - alloc[j][i];
+        avlbl[i] = resources[i] - rsum;
     }
 
     int count = 0;
-    while (1){
-        for(i = 1; i <= nop; i++) {
-            if(need[i][nor + 1] == 0) {
-                for(j = 1; j <= nor; j++) {
-                    if(avlbl[j] < need[i][j]) {
+    printf("\nSafe sequence: ");
+
+    // ✅ Fix Bug 2: progress flag prevents infinite loop
+    while (1) {
+        int progress = 0;
+        for (i = 1; i <= nop; i++) {
+            if (finished[i] == 0) {          // ✅ Fix Bug 3
+                for (j = 1; j <= nor; j++)
+                    if (avlbl[j] < need[i][j])
                         break;
-                    }
-                }
-                if(j > nor) {
-                    for(k = 1; k <= nor; k++) {
-                    avlbl[k] = avlbl[k] + alloc[i][k];
-                }
-                    need[i][nor + 1] = i; 
+
+                if (j > nor) {
+                    for (k = 1; k <= nor; k++)
+                        avlbl[k] += alloc[i][k];
+                    finished[i] = 1;         // ✅ Fix Bug 4
                     count++;
-                    printf("P%d -> ", i);
+                    progress = 1;
+                    printf("P%d ", i);
                 }
-            } else {
-                count++;
             }
         }
-        if(count >= nop) {
-            break;
-        }
+        if (!progress || count >= nop) break;
     }
-    
+
+    if (count == nop)
+        printf("\nNo Deadlock, system is safe.");
+    else
+        printf("\nDeadlock detected.");
 
     return 0;
-}
+}   
